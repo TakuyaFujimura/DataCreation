@@ -4,6 +4,8 @@ from pathlib import Path
 
 import torchaudio
 
+# python make_csv.py ./rir_list.csv /home/fujimura/gitrepo/DataCreation
+
 
 def main(args):
     with open(args.csv_file, "w") as f:
@@ -13,14 +15,17 @@ def main(args):
         rir_path_list = f.read().split()[4::5]
     i = 0
     for rir_path in rir_path_list:
-        meta_data = torchaudio.info(rir_path)
+        meta_data = torchaudio.info(f"{args.dir_path}/{rir_path}")
         duration = meta_data.num_frames / meta_data.sample_rate
-        writer.writerow([i, duration, rir_path, "wav", ""])
+        with open(args.csv_file, "a") as f:
+            writer = csv.writer(f)
+            writer.writerow([i, duration, f"{args.dir_path}/{rir_path}", "wav", ""])
         i += 1
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("csv_file", type=str, help="save name of the csv file")
+    parser.add_argument("dir_path", type=str, help="path to the RIR_NOISES")
     args = parser.parse_args()
     main(args)
