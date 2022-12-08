@@ -1,0 +1,19 @@
+# @package _global_
+
+name: "RIR_MIT"
+
+proc_func_names: null
+#   - "resample"
+
+target_dir: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RIR_MIT_org
+save_dir: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RIR_MIT
+
+old_params:
+  sr: 32000
+  ch: 1
+  subtype: "PCM_24"
+
+new_params:
+  sr: 32000
+  ch: 1
+  subtype: "PCM_16"

@@ -9,11 +9,11 @@ import torchaudio
 from speechbrain.processing.speech_augmentation import AddReverb
 
 # python add_reverb.py ./rir_list.csv ../../00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000 ../../00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000_reverb
-# python add_reverb.py ./rir_list.csv ../../00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1 ../../00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1_reverb
+# python add_reverb.py ./rir_list.csv ../../00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1 ../../00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1_reverb --rir_scale_factors 1
 
 
 class MyAddReverb:
-    def __init__(self, rir_scale_factors, csv_file):
+    def __init__(self, rir_scale_factors, csv_file, rir_folder):
         self.reverb_funcs = torch.nn.ModuleList([])
         self.rir_scale_factors = rir_scale_factors
         for scale in rir_scale_factors:
@@ -22,7 +22,7 @@ class MyAddReverb:
                     csv_file,
                     rir_scale_factor=scale,
                     replacements={
-                        "RIRS1ch": "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/RIRS1ch"
+                        "rir_folder": f"/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/{rir_folder}"
                     },
                 )
             )
@@ -44,18 +44,19 @@ class MyAddReverb:
 def main(args):
     seed = 1234
     pl.seed_everything(seed)
-    reverber = MyAddReverb(args.rir_scale_factors, args.csv_file)
+    reverber = MyAddReverb(args.rir_scale_factors, args.csv_file, args.rir_folder)
 
     nas03_dir = os.getcwd().replace("nas01", "nas03")
     dir_path = Path(nas03_dir) / Path(args.dir_path)
     save_dir = Path(nas03_dir) / Path(args.save_dir_path)
-    save_dir.mkdir(parents=True, exist_ok=True)
-    with open(f"{str(save_dir)}/readme.txt", "w") as f:
+    save_dir.mkdir(parents=True, exist_ok=False)
+    with open(f"{str(save_dir)}/readme.txt", "a") as f:
         f.write("This dataset is created by DataCreation/add_reverb.py\n")
         f.write(f"nas03_dir: {nas03_dir}\n")
         f.write(f"csv_file: {args.csv_file}\n")
         f.write(f"dir_path: {args.dir_path}\n")
         f.write(f"save_dir_path: {args.save_dir_path}\n")
+        f.write(f"rir_folder: {args.rir_folder}\n")
         f.write(f"rir_scale_factors: {args.rir_scale_factors}\n")
         f.write(f"seed: {seed}\n")
 
@@ -81,6 +82,11 @@ if __name__ == "__main__":
         "save_dir_path",
         type=str,
         help="directory where the reverbed signal is saved on",
+    )
+    parser.add_argument(
+        "rir_folder",
+        type=str,
+        help="RIRS folder which is replaced with $rir_folder in the AddReverb func.",
     )
     parser.add_argument(
         "--rir_scale_factors",

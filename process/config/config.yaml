@@ -1,0 +1,11 @@
+defaults:
+    - _self_
+    - experiments: null
+
+name: null
+
+seed: 1234
+
+hydra:
+    run:
+        dir: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/hydra_data/${name}
