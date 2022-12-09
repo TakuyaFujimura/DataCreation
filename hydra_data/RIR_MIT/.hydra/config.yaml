@@ -1,0 +1,13 @@
+name: RIR_MIT
+seed: 1234
+proc_func_names: null
+target_dir: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RIR_MIT_org
+save_dir: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RIR_MIT
+old_params:
+  sr: 32000
+  ch: 1
+  subtype: PCM_24
+new_params:
+  sr: 32000
+  ch: 1
+  subtype: PCM_16

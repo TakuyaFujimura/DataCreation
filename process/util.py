@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 import soundfile as sf
+import torch
 
 
 def wavread(filepath):
@@ -30,3 +31,23 @@ def randomcrop_repeat(data, crop_len):
         dif = len(data) - crop_len
     start = random.randint(0, dif)
     return data[start : start + crop_len]
+
+
+def check_format(old_params, data, sr_old=None, subtype_old=None):
+    if getattr(old_params, "ch", None) is not None:
+        if isinstance(data, torch.Tensor):
+            if len(data.shape) == 1:
+                assert 1 == old_params.ch
+            else:
+                assert data.shape[0] == old_params.ch
+        elif isinstance(data, np.ndarray):
+            if len(data.shape) == 1:
+                assert 1 == old_params.ch
+            else:
+                assert data.shape[1] == old_params.ch
+        else:
+            raise ValueError(f"{type(data)} is not supported.")
+    if (getattr(old_params, "sr", None) is not None) and (sr_old is not None):
+        assert sr_old == old_params.sr
+    if (getattr(old_params, "subtype", None) is not None) and (subtype_old is not None):
+        assert subtype_old == old_params.subtype

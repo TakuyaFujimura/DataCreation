@@ -4,7 +4,7 @@ import hydra
 import numpy as np
 from pytorch_lightning import seed_everything
 from scipy import signal
-from util import wavread, wavwrite
+from util import check_format, wavread, wavwrite
 
 
 class ChangeFormat:
@@ -41,15 +41,7 @@ def main(cfg):
     for aud_path in target_dir.glob("*.wav"):
         data, sr_old, subtype_old = wavread(aud_path)
         # confirm whether the data format is correct
-        if old_params.ch is not None:
-            if len(data.shape) == 1:
-                assert 1 == old_params.ch
-            else:
-                assert data.shape[1] == old_params.ch
-        if old_params.sr is not None:
-            assert sr_old == old_params.sr
-        if old_params.subtype is not None:
-            assert subtype_old == old_params.subtype
+        check_format(old_params, data, sr_old, subtype_old)
 
         # change the format
         if cfg.proc_func_names is not None:

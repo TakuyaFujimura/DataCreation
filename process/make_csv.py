@@ -7,6 +7,23 @@ import torchaudio
 # python make_csv.py ./rir_list.csv
 
 
+def make_csv(csv_file, filename_list):
+    with open(csv_file, "w") as f:
+        writer = csv.writer(f)
+        writer.writerow(["ID", "duration", "wav", "wav_format", "wav_opts"])
+    i = 0
+    for filename in filename_list:
+        rir_path = filename
+        meta_data = torchaudio.info(rir_path)
+        if meta_data.num_channels != 1:
+            print(rir_path)
+        duration = meta_data.num_frames / meta_data.sample_rate
+        with open(csv_file, "a") as f:
+            writer = csv.writer(f)
+            writer.writerow([i, duration, rir_path, "wav", ""])
+        i += 1
+
+
 def A(args):
     with open(args.csv_file, "w") as f:
         writer = csv.writer(f)
