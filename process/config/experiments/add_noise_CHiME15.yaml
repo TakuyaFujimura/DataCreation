@@ -1,0 +1,22 @@
+# @package _global_
+
+name: "LibriSpeech_train_noisy_100_10000_CHiME1_snr15"
+
+
+clean_dir: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000
+noise_dir: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1_only_noise
+save_dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_CHiME1_snr15
+snr_list:
+   - 15
+   
+pickup_mode: "pair" #"random" #
+
+old_params:
+  sr: 16000
+  ch: 1
+  subtype: "PCM_16"
+
+new_params:
+  sr: 16000
+  ch: 1
+  subtype: "PCM_16"

@@ -1,10 +1,10 @@
 # @package _global_
 
-name: "LibriSpeech_train_clean_100_10000_rir_mit_00_05"
+name: "LibriSpeech_train_clean_100_10000_rir_mit_10_15"
 
-csv_file: ./rircsv/rir_mit_00_05.csv
+csv_file: ./rircsv/rir_mit_10_15.csv
 dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000
-save_dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000_rir_mit_00_05
+save_dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000_rir_mit_10_15
 rir_folder: /nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RIR_MIT
 reverb_sr: 32000
 clean_sr: 16000

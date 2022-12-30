@@ -1,11 +1,11 @@
 # @package _global_
 
-name: "LibriSpeech_train_noisy_100_10000_rir_mit_00_05_DEMAND1"
+name: "LibriSpeech_train_noisy_100_10000_rir_mit_10_15_DEMAND1"
 
 
-clean_dir: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000_rir_mit_00_05
+clean_dir: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_clean_100_10000_rir_mit_10_15
 noise_dir: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_DEMAND1_only_noise
-save_dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_rir_mit_00_05_DEMAND1
+save_dir_path: /nas03/homes/fujimura22-1000060/linux/project01/00ASJ2022autumn/dataset/LibriSpeech_train_noisy_100_10000_rir_mit_10_15_DEMAND1
 snr_list:
    - 0
    - 5
