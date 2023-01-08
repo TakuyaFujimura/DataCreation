@@ -58,13 +58,16 @@ def analyze_rt60csv(
         plt.close()
 
 
+# ====================main functions====================#
+
+
 def main_make_rt60csv_myRIR():
     params = OmegaConf.create({"sr": 16000, "ch": 1, "subtype": "PCM_16"})
     rirdir_parent = Path(
         "/nas03/homes/fujimura22-1000060/linux/project01/mydataset/myRIR"
     )
     csvdir = Path(
-        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RT60/myRIR"
+        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/myRIR"
     )
     for rirdir in rirdir_parent.glob("*"):
         if rirdir.is_dir():
@@ -75,7 +78,7 @@ def main_make_rt60csv_myRIR():
 def main_analyze_rt60csv_myRIR():
 
     csvdir = Path(
-        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RT60/myRIR"
+        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/myRIR"
     )
     for csv_path in csvdir.glob("*.csv"):
         save_path_stem = Path(f"{str(csvdir)}/{csv_path.stem}")
@@ -88,7 +91,7 @@ def main_make_rt60csv_myRIR2():
         "/nas03/homes/fujimura22-1000060/linux/project01/mydataset/myRIR"
     )
     csvdir = Path(
-        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RT60/myRIR"
+        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/myRIR"
     )
     for rirdir in rirdir_parent.glob("*"):
         if rirdir.is_dir():
@@ -100,7 +103,7 @@ def main_make_rt60csv_myRIR2():
 def main_analyze_rt60csv_myRIR2():
 
     csvdir = Path(
-        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/RT60/myRIR"
+        "/nas01/homes/fujimura22-1000060/linux/project01/gitrepo/DataCreation/Data/myRIR"
     )
     for csv_path in csvdir.glob("*.csv"):
         if str(csv_path.stem)[4:] in ["12", "13", "14", "15", "16", "17"]:
@@ -109,6 +112,7 @@ def main_analyze_rt60csv_myRIR2():
 
 
 if __name__ == "__main__":
-    # main_make_rt60csv_myRIR()
-    main_make_rt60csv_myRIR2()
-    main_analyze_rt60csv_myRIR2()
+    main_make_rt60csv_myRIR()
+    main_analyze_rt60csv_myRIR()
+    # main_make_rt60csv_myRIR2()
+    # main_analyze_rt60csv_myRIR2()
