@@ -5,7 +5,8 @@ import hydra
 import numpy as np
 import pyroomacoustics as pra
 import pytorch_lightning as pl
-from util import wavwrite
+from tqdm import tqdm
+from util import make_readme, wavwrite
 
 
 def make_room(rt60tgt: float, roomdim: list, fs: float) -> pra.room.ShoeBox:
@@ -20,7 +21,11 @@ def make_room(rt60tgt: float, roomdim: list, fs: float) -> pra.room.ShoeBox:
     """
     e_absorption, max_order = pra.inverse_sabine(rt60tgt, roomdim)
     room = pra.ShoeBox(
-        roomdim, fs=fs, materials=pra.Material(e_absorption), max_order=max_order
+        roomdim,
+        fs=fs,
+        materials=pra.Material(e_absorption),
+        max_order=max_order,
+        use_rand_ism=True,
     )
     return room
 
@@ -65,27 +70,33 @@ def main(cfg):
     pl.seed_everything(cfg.seed)
     fs = cfg.sr
     rt60tgt_list = cfg.rt60tgt_list
-    roomdim_dict = cfg.roomdim_dict
+    roomdim_dict = cfg.roomdim_dict.items()
     n_samples = cfg.n_samples
     save_dir_parent = Path(cfg.save_dir_path)
-    save_dir_parent.mkdir(parents=True, exist_ok=False)
+
+    save_dir_parent.mkdir(parents=False, exist_ok=getattr(cfg, "exist_ok", False))
+    make_readme(save_dir_parent, "DataCreation/process/make_rir.py", cfg.name)
+    if cfg.tqdm:
+        roomdim_dict = tqdm(roomdim_dict)
     for roomname, roomdim in roomdim_dict:
         save_dir = save_dir_parent / roomname
         save_dir.mkdir(parents=False, exist_ok=False)
         for rt60tgt in rt60tgt_list:
-            room = make_room(rt60tgt, np.array(roomdim), fs)
             for i in range(n_samples):
+                room = make_room(rt60tgt, np.array(roomdim), fs)
                 src_loc, mic_loc = get_loc(roomdim)
                 room.add_source(src_loc)
                 room.add_microphone(mic_loc)
                 room.compute_rir()
                 rir = room.rir[0][0]
-                # measured_rt60 = pra.experimental.rt60.measure_rt60(
-                #    rir, fs=fs, decay_db=60, plot=False
-                # )
+                rt60tgt_str = "".join(str(rt60tgt).split("."))
                 wavwrite(
-                    save_dir / f"{rt60tgt}_{i:03}.wav",
+                    save_dir / f"{rt60tgt_str}_{i:03}.wav",
                     rir,
                     fs,
                     cfg.subtype,
                 )
+
+
+if __name__ == "__main__":
+    main()

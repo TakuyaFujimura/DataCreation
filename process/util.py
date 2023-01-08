@@ -1,8 +1,23 @@
 import random
+from decimal import ROUND_HALF_UP, Decimal
 
 import numpy as np
 import soundfile as sf
 import torch
+from omegaconf import DictConfig
+
+
+def make_readme(savedir, exec_filename, hydra_name):
+    with open(f"{str(savedir)}/readme.txt", "a") as f:
+        f.write(f"This dataset is created by {exec_filename}\n")
+        f.write(
+            f"For the detail, please refer the DataCreation/hydra_data/{hydra_name}"
+        )
+
+
+def myround(x, point="0.01"):
+    x_rounded = Decimal(str(x)).quantize(Decimal(point), rounding=ROUND_HALF_UP)
+    return x_rounded
 
 
 def wavread(filepath):
@@ -33,21 +48,21 @@ def randomcrop_repeat(data, crop_len):
     return data[start : start + crop_len]
 
 
-def check_format(old_params, data, sr_old=None, subtype_old=None):
-    if getattr(old_params, "ch", None) is not None:
+def check_format(params: DictConfig, data, sr=None, subtype=None):
+    if getattr(params, "ch", None) is not None:
         if isinstance(data, torch.Tensor):
             if len(data.shape) == 1:
-                assert 1 == old_params.ch
+                assert 1 == params.ch
             else:
-                assert data.shape[0] == old_params.ch
+                assert data.shape[0] == params.ch
         elif isinstance(data, np.ndarray):
             if len(data.shape) == 1:
-                assert 1 == old_params.ch
+                assert 1 == params.ch
             else:
-                assert data.shape[1] == old_params.ch
+                assert data.shape[1] == params.ch
         else:
             raise ValueError(f"{type(data)} is not supported.")
-    if (getattr(old_params, "sr", None) is not None) and (sr_old is not None):
-        assert sr_old == old_params.sr
-    if (getattr(old_params, "subtype", None) is not None) and (subtype_old is not None):
-        assert subtype_old == old_params.subtype
+    if (getattr(params, "sr", None) is not None) and (sr is not None):
+        assert sr == params.sr
+    if (getattr(params, "subtype", None) is not None) and (subtype is not None):
+        assert subtype == params.subtype
